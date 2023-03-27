@@ -15,7 +15,6 @@ class CircularQueue:
     def __init__(self):
         self._data = []
         self._head = None
-        self._tail = None
         self._size = 0
 
     def __repr__(self):
@@ -57,16 +56,31 @@ class CircularQueue:
             self._head = self._data[0]
             self._size -= 1
 
+    def dequeue_e(self, e):
+        node = self._head
+        self._head = None
+        nodes = []
+        i = 0
+        while i != self._size:
+            nodes.append(node._element)
+            node = node._next
+            i += 1
+        if e in nodes:
+            nodes.remove(e)
+            for j in range(len(nodes)):
+                self.enqueue(nodes[j])
+            self._size = int(self._size - 1)
+        else:
+            return ("Element", e, "is not in the array")
+
     def enqueue(self, e):
         node = self._Node(e, None)
         self._size += 1
         if self._head == None:
             self._head = node
-            self._tail = node
             self._data.append(node)
         else:
             self._data[-1]._next = node
-            self._tail = node
             self._data.append(node)
 
     def rotate(self):
@@ -79,3 +93,4 @@ class CircularQueue:
         for i in range(len(nodes)):
             j = (len(nodes) - 1) - i
             self.enqueue(nodes[j])
+        self._size = int(self._size / 2)
